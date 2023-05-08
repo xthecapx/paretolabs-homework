@@ -12,7 +12,7 @@ import (
 	"paretolabs-backend/utils"
 )
 
-func GetDataAndWriteToFile(startFID, endFID int) ([]models.User, error) {
+func GetDataAndWriteToFile(startFID, endFID int) (map[int]models.User, []models.User, error) {
 	var userList []models.User
 
 	// Iterate over the fid range

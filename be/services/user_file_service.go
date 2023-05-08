@@ -9,17 +9,18 @@ import (
 	"paretolabs-backend/utils"
 )
 
-func ReadUsersFromFile() ([]models.User, error) {
+func ReadUsersFromFile() (map[int]models.User, []models.User, error) {
 	fileData, err := ioutil.ReadFile(utils.GetUserFilePath())
 	if err != nil {
-		return nil, fmt.Errorf("failed to read users.json file: %v", err)
+		return nil, nil, fmt.Errorf("failed to read users.json file: %v", err)
 	}
 
 	var userList []models.User
 	err = json.Unmarshal(fileData, &userList)
 	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal users.json data: %v", err)
+		return nil, nil, fmt.Errorf("failed to unmarshal users.json data: %v", err)
 	}
+	userHasMap := utils.TransformToHashMap(userList)
 
-	return userList, nil
+	return userHasMap, userList, nil
 }

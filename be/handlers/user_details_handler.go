@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetUserDetailsHandler(c *gin.Context, userList []models.User) {
+func GetUserDetailsHandler(c *gin.Context, userList map[int]models.User) {
 	// Get the FID parameter from the request URL
 	fidStr := c.Param("fid")
 
@@ -20,18 +20,16 @@ func GetUserDetailsHandler(c *gin.Context, userList []models.User) {
 		return
 	}
 
-	// Find the user with the matching FID in the userList
-	var userDetails *models.User
-	for _, user := range userList {
-		if user.FID == fid {
-			userDetails = &user
-			break
-		}
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid FID"})
+		return
 	}
 
-	if userDetails == nil {
+	user, ok := userList[fid]
+	if !ok {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
-	} else {
-		c.JSON(http.StatusOK, gin.H{"data": userDetails})
+		return
 	}
+
+	c.JSON(http.StatusOK, user)
 }
