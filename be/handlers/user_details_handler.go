@@ -12,6 +12,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetUserDetailsHandler returns details of a specific user.
+// @Summary Get user details
+// @Description Get details of a user based on the FID.
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param fid path int true "User FID"
+// @Success 200 {object} models.UserProfileResponse
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Router /users/{fid} [get]
 func GetUserDetailsHandler(c *gin.Context, userList map[int]models.User) {
 	// Get the FID parameter from the request URL
 	fidStr := c.Param("fid")

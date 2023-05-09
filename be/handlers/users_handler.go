@@ -9,6 +9,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetUsersHandler returns a paginated list of users.
+//
+//	@Summary		Get paginated list of users
+//	@Description	Get a paginated list of users with pagination support.
+//	@Tags			Users
+//	@Accept			json
+//	@Produce		json
+//	@Param			page		query		int	false	"Page number"				default(1)
+//	@Param			per_page	query		int	false	"Number of users per page"	default(15)
+//	@Success		200			{object}	models.PaginatedUsersResponse
+//	@Failure		400			{object}	models.ErrorResponse
+//	@Router			/users [get]
 func GetUsersHandler(c *gin.Context, userList []models.User) {
 	// Get the pagination parameters from the query string
 	pageStr := c.DefaultQuery("page", "1")

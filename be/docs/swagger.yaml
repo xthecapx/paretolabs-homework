@@ -1,0 +1,190 @@
+basePath: /
+definitions:
+  models.Bio:
+    properties:
+      mentions:
+        items:
+          type: string
+        type: array
+      text:
+        type: string
+    type: object
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.Location:
+    properties:
+      description:
+        type: string
+      placeId:
+        type: string
+    type: object
+  models.PFP:
+    properties:
+      url:
+        type: string
+      verified:
+        type: boolean
+    type: object
+  models.PaginatedUsersResponse:
+    properties:
+      page:
+        type: integer
+      per_page:
+        type: integer
+      total_count:
+        type: integer
+      userList:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+    type: object
+  models.Profile:
+    properties:
+      bio:
+        $ref: '#/definitions/models.Bio'
+      location:
+        $ref: '#/definitions/models.Location'
+    type: object
+  models.ProfileBody:
+    properties:
+      address:
+        type: string
+      avatarUrl:
+        type: string
+      bio:
+        type: string
+      displayName:
+        type: string
+      followers:
+        type: integer
+      following:
+        type: integer
+      id:
+        type: integer
+      isVerifiedAvatar:
+        type: boolean
+      registeredAt:
+        type: integer
+      username:
+        type: string
+    type: object
+  models.User:
+    properties:
+      displayName:
+        type: string
+      fid:
+        type: integer
+      followerCount:
+        type: integer
+      followingCount:
+        type: integer
+      pfp:
+        $ref: '#/definitions/models.PFP'
+      profile:
+        $ref: '#/definitions/models.Profile'
+      referrerUsername:
+        type: string
+      username:
+        type: string
+      viewerContext:
+        $ref: '#/definitions/models.ViewerContext'
+    type: object
+  models.UserProfile:
+    properties:
+      address:
+        type: string
+      profileInformation:
+        $ref: '#/definitions/models.ProfileBody'
+      userInformation:
+        $ref: '#/definitions/models.User'
+    type: object
+  models.UserProfileResponse:
+    properties:
+      profileData:
+        $ref: '#/definitions/models.UserProfile'
+    type: object
+  models.ViewerContext:
+    properties:
+      canSendDirectCasts:
+        type: boolean
+      followedBy:
+        type: boolean
+      following:
+        type: boolean
+    type: object
+host: localhost:1234
+info:
+  contact:
+    email: ing.cristian.marquez@gmail.com
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Solution to the test
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Pareto labs - Homework
+  version: "1.0"
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of users with pagination support.
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 15
+        description: Number of users per page
+        in: query
+        name: per_page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PaginatedUsersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get paginated list of users
+      tags:
+      - Users
+  /users/{fid}:
+    get:
+      consumes:
+      - application/json
+      description: Get details of a user based on the FID.
+      parameters:
+      - description: User FID
+        in: path
+        name: fid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserProfileResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get user details
+      tags:
+      - Users
+swagger: "2.0"
