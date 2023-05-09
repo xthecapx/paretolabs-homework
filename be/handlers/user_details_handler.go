@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -35,8 +34,9 @@ func GetUserDetailsHandler(c *gin.Context, userList map[int]models.User) {
 		return
 	}
 
-	url := fmt.Sprintf("https://searchcaster.xyz/api/profiles?username=%s", user.Username)
+	url := "https://searchcaster.xyz/api/profiles?username=" + user.Username
 
+	log.Print(url)
 	// Send a GET request to the URL to fetch the data
 	response, err := http.Get(url)
 	if err != nil {
@@ -47,21 +47,23 @@ func GetUserDetailsHandler(c *gin.Context, userList map[int]models.User) {
 	// Read the response body
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Printf("Failed to read response body for fid %d: %v", fid, err)
+		log.Printf("Failed to read response body for fid %d %s: %v", fid, user.Username, err)
 	}
 
 	// Parse the received data into the struct
-	var profile models.ProfileResponse
+	var profile []models.ProfileResponse
 	err = json.Unmarshal(body, &profile)
 	if err != nil {
 		log.Printf("Failed to parse data into struct for fid %d: %v", fid, err)
 	}
 
+	log.Print(profile[0].Body)
 	userInformation := models.UserProfile{
 		UserInformation:    user,
-		Address:            profile.ConnectedAddress,
-		ProfileInformation: profile.Body,
+		Address:            profile[0].ConnectedAddress,
+		ProfileInformation: profile[0].Body,
 	}
 
-	c.JSON(http.StatusOK, userInformation)
+	// c.JSON(http.StatusOK, userInformation)
+	c.JSON(http.StatusOK, gin.H{"profileData": userInformation})
 }
