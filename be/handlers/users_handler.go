@@ -32,7 +32,7 @@ func GetUsersHandler(c *gin.Context, userList []models.User) {
 	endIndex := startIndex + perPage
 
 	if startIndex >= len(userList) {
-		c.JSON(http.StatusOK, gin.H{"data": []models.User{}, "page": page, "per_page": perPage, "total_users": len(userList)})
+		c.JSON(http.StatusOK, gin.H{"userList": []models.User{}, "page": page, "per_page": perPage, "total_count": len(userList)})
 		return
 	}
 
@@ -43,5 +43,5 @@ func GetUsersHandler(c *gin.Context, userList []models.User) {
 	// Get the paginated list of users
 	paginatedUsers := userList[startIndex:endIndex]
 
-	c.JSON(http.StatusOK, gin.H{"data": paginatedUsers, "page": page, "per_page": perPage, "total_users": len(userList)})
+	c.JSON(http.StatusOK, gin.H{"userList": paginatedUsers, "page": page, "per_page": perPage, "total_count": len(userList)})
 }
