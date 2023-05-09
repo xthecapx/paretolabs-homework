@@ -1,6 +1,6 @@
 import { useRef, useCallback } from "react";
 import { useInfiniteQuery } from "react-query";
-import { Item } from './Item'
+import { Item } from "./Item";
 
 const fetchUsers = async (ctx: { pageParam?: number }) => {
   const { pageParam = 1 } = ctx;
@@ -51,13 +51,16 @@ function UserList() {
                   ref={lastUserNodeRef}
                   key={user.fid}
                   text={`${user.fid} - ${user.username}`}
+                  to={`/users/${user.fid}`}
                 />
               );
             }
             return (
-              <div key={user.fid}>
-                <span>{`${user.fid} - ${user.username}`}</span>
-              </div>
+              <Item
+                key={user.fid}
+                text={`${user.fid} - ${user.username}`}
+                to={`/users/${user.fid}`}
+              />
             );
           }
         );
