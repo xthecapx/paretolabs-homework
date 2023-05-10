@@ -12,29 +12,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//	@title			Pareto labs - Homework
-//	@version		1.0
-//	@description	Solution to the test
+// @title			Pareto labs - Homework
+// @version		1.0
+// @description	Solution to the test
 
-//	@contact.name	API Support
-//	@contact.url	http://www.swagger.io/support
-//	@contact.email	ing.cristian.marquez@gmail.com
+// @contact.name	API Support
+// @contact.url	http://www.swagger.io/support
+// @contact.email	ing.cristian.marquez@gmail.com
 
-//	@license.name	MIT
-//	@license.url	https://opensource.org/licenses/MIT
+// @license.name	MIT
+// @license.url	https://opensource.org/licenses/MIT
 
-//	@host						localhost:1234
-//	@BasePath					/
-//	@query.collection.format	multi
+// @host						localhost:1234
+// @BasePath					/
+// @query.collection.format	multi
 func main() {
-	userListMap, userList := services.GetUsersList()
+	userHasMap, userList := services.GetUsersList()
 	router := gin.Default()
 
 	router.GET("/users", func(c *gin.Context) {
 		handlers.GetUsersHandler(c, userList)
 	})
 	router.GET("/users/:fid", func(c *gin.Context) {
-		handlers.GetUserDetailsHandler(c, userListMap)
+		handlers.GetUserDetailsHandler(c, userHasMap)
 	})
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

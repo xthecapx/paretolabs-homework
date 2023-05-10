@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { useInfiniteQuery } from "react-query";
 import { Item } from "./Item";
 
@@ -10,7 +10,7 @@ const fetchUsers = async (ctx: { pageParam?: number }) => {
   return data;
 };
 
-function UserList() {
+function UserList(): JSX.Element {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery("users", fetchUsers, {
@@ -44,13 +44,13 @@ function UserList() {
     <div ref={wrapperRef}>
       {data?.pages.map((page) => {
         return page.userList.map(
-          (user: { username: string; fid: number }, i: number) => {
+          (user: { displayName: string; fid: number }, i: number) => {
             if (page.userList.length === i + 1) {
               return (
                 <Item
                   ref={lastUserNodeRef}
                   key={user.fid}
-                  text={`${user.fid} - ${user.username}`}
+                  text={user.displayName}
                   to={`/users/${user.fid}`}
                 />
               );
@@ -58,7 +58,7 @@ function UserList() {
             return (
               <Item
                 key={user.fid}
-                text={`${user.fid} - ${user.username}`}
+                text={user.displayName}
                 to={`/users/${user.fid}`}
               />
             );

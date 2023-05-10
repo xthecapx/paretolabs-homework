@@ -23,7 +23,7 @@ import (
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 404 {object} models.ErrorResponse
 // @Router /users/{fid} [get]
-func GetUserDetailsHandler(c *gin.Context, userList map[int]models.User) {
+func GetUserDetailsHandler(c *gin.Context, userHasMap map[int]models.User) {
 	// Get the FID parameter from the request URL
 	fidStr := c.Param("fid")
 
@@ -39,7 +39,7 @@ func GetUserDetailsHandler(c *gin.Context, userList map[int]models.User) {
 		return
 	}
 
-	user, ok := userList[fid]
+	user, ok := userHasMap[fid]
 	if !ok {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return

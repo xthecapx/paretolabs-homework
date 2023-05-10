@@ -1,11 +1,12 @@
-import { json, useLoaderData } from "react-router-dom";
-import MainLayout from "../templates/MainLayout";
-import ProfileTable from "../components/ProfileTable";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { LoaderFunction, LoaderFunctionArgs, json, useLoaderData } from "react-router-dom";
+import ProfileTable from "../components/ProfileTable";
+import MainLayout from "../templates/MainLayout";
 
-export const UserProfileLoader = async ({ params }) => {
+
+export const UserProfileLoader: LoaderFunction = async ({ params }: LoaderFunctionArgs ) => {
   let results;
 
   try {
@@ -13,8 +14,8 @@ export const UserProfileLoader = async ({ params }) => {
     results = await response.json();
   } catch (e) {
     return json(
-      { data: e.response.data, statusText: e.statusText },
-      { status: e.response.status }
+      { data: 'error' },
+      { status: 400 }
     );
   }
 
@@ -32,12 +33,27 @@ export const UserProfileLoader = async ({ params }) => {
   );
 };
 
-function createData(field: string, value: string) {
+export interface Row {
+  field: string;
+  value: string;
+}
+
+interface UserProfileData {
+  username: string;
+  bio: string;
+  address: string;
+  avatar: string;
+  displayName: string;
+  followers: string;
+  following: string;
+}
+
+function createData(field: string, value: string): Row {
   return { field, value };
 }
 
-function UserProfile() {
-  const data = useLoaderData();
+function UserProfile(): JSX.Element {
+  const data = useLoaderData() as UserProfileData;
 
   const rows = [
     createData("Username", data?.username),
